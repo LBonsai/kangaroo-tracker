@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() : void
     {
         Schema::create('kangaroo', function (Blueprint $oTable) {
             $oTable->bigIncrements('id');
@@ -19,10 +19,11 @@ return new class extends Migration
             $oTable->string('nickname', 60)->nullable();
             $oTable->float('weight');
             $oTable->float('height');
-            $oTable->enum('gender', ['Male', 'Female'])->default('Male');
+            $oTable->enum('gender', ['Male', 'Female']);
             $oTable->string('color', 60)->nullable();
             $oTable->enum('friendliness', ['friendly', 'not friendly'])->nullable();
             $oTable->date('birthday');
+            $oTable->timestamps();
         });
     }
 
@@ -31,7 +32,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down() : void
     {
         Schema::dropIfExists('kangaroo');
     }
