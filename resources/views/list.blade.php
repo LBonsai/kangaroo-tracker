@@ -12,17 +12,23 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="//cdn3.devexpress.com/jslib/23.1.3/css/dx.light.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
 </head>
 
-<body class="dx-viewport">
+<body>
     <div class="container">
-        <div id="gridContainer"></div>
+        <h1 class="text-center mt-4 mb-4">Kangaroo Tracker App</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div id="gridContainer"></div>
+            </div>
+        </div>
     </div>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn3.devexpress.com/jslib/23.1.3/js/dx.all.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="//cdn3.devexpress.com/jslib/23.1.3/js/dx.all.js"></script>
-
 </html>

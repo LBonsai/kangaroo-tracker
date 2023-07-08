@@ -5,7 +5,8 @@ $(() => {
     var sConfirmationMessage = 'Are you sure you want to register this new data?';
     var sUrl = '/api/add';
     var sAlertMessage = 'Registration successful';
-    var sErrorMessages = 'There is an error while saving new data.';
+    var sErrorMessages = 'There is an error while saving new data.'
+    var sFormName = 'Registration Form';
 
     init();
 
@@ -24,25 +25,26 @@ $(() => {
         let sPathName = window.location.pathname;
         let aExplodedPathName = sPathName.split('/');
 
-        // List Page
         if (sPathName === '/' || aExplodedPathName[2] === 'list') {
             getKangarooData();
-        } else if (aExplodedPathName[2] === 'add') {
+        }
 
-        } else {
+        if (aExplodedPathName[2] === 'edit') {
             sMethod = 'PUT';
             sConfirmationMessage = 'Are you sure you want to update the data?';
             iCurrentId = aExplodedPathName[3];
             sUrl = '/api/edit/' + iCurrentId;
             sAlertMessage = 'Modification successful';
             sErrorMessages = 'There is an error while updating data.';
+            sFormName = 'Update Form';
             populateForm(iCurrentId);
         }
+
+        $('#form-name').text(sFormName);
     }
 
     /**
      * getKangarooData
-     * Fetch all kangaroo data
      * @author Lee Benedict F. Baniqued
      * @since 2023.07.06
      */
@@ -63,7 +65,6 @@ $(() => {
 
     /**
      * populateTable
-     * @author Lee Benedict F. Baniqued
      * @since 2023.07.06
      * @param {object} oData
      */
@@ -240,7 +241,6 @@ $(() => {
 
     /**
      * checkIfEmpty
-     * Validates whether a given input is empty or not
      * @author Lee Benedict F. Baniqued
      * @since 2023.07.07
      * @param oFormData
@@ -271,7 +271,6 @@ $(() => {
 
     /**
      * checkIfValidCharactersAndLength
-     * Validates characters and length of a given input
      * @author Lee Benedict F. Baniqued
      * @since 2023.07.07
      * @param {object} oFormData
@@ -316,7 +315,6 @@ $(() => {
 
     /**
      * checkIfNameExists
-     * Checks if name is already exists in the current record
      * @author Lee Benedict F. Baniqued
      * @since 2023.07.07
      * @param {string} sName

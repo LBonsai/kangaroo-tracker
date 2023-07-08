@@ -11,43 +11,45 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
     <div class="container">
+        <h1 class="text-center mt-4">Kangaroo Tracker App</h1>
         <div class="row justify-content-center">
-            <div class="col-md-9">
+            <div class="col-md-6">
+                <h2 class="mt-4 mb-4" id="form-name"></h2>
                 <form id="kangaroo-form">
-                    <div class="form-group">
-                        <label for="name">Name</label>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label> <span class="text-danger">*</span></label>
                         <input type="text" id="name" class="form-control" placeholder="Name">
                         <div class="invalid-feedback" id="name-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="nickname">Nickname</label>
+                    <div class="mb-3">
+                        <label for="nickname" class="form-label">Nickname</label>
                         <input type="text" id="nickname" class="form-control" placeholder="Nickname">
                         <div class="invalid-feedback" id="nickname-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="weight">Weight</label>
+                    <div class="mb-3">
+                        <label for="weight" class="form-label">Weight</label> <span class="text-danger">*</span></label>
                         <input type="number" id="weight" class="form-control" placeholder="Weight">
                         <div class="invalid-feedback" id="weight-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="height">Height</label>
+                    <div class="mb-3">
+                        <label for="height" class="form-label">Height</label> <span class="text-danger">*</span></label>
                         <input type="number" id="height" class="form-control" placeholder="Height">
                         <div class="invalid-feedback" id="height-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select class="form-control" id="gender">
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender</label> <span class="text-danger">*</span></label>
+                        <select class="form-select" id="gender">
                             <option disabled selected>Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -55,15 +57,15 @@
                         <div class="invalid-feedback" id="gender-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="color">Color</label>
+                    <div class="mb-3">
+                        <label for="color" class="form-label">Color</label>
                         <input type="text" id="color" class="form-control" placeholder="Color">
                         <div class="invalid-feedback" id="color-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="friendliness">Friendliness</label>
-                        <select class="form-control" id="friendliness">
+                    <div class="mb-3">
+                        <label for="friendliness" class="form-label">Friendliness</label>
+                        <select class="form-select" id="friendliness">
                             <option disabled selected>Select Friendliness</option>
                             <option value="friendly">friendly</option>
                             <option value="not friendly">not friendly</option>
@@ -71,19 +73,22 @@
                         <div class="invalid-feedback" id="friendliness-error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="birthday">Birthday</label>
+                    <div class="mb-3">
+                        <label for="birthday" class="form-label">Birthday</label> <span class="text-danger">*</span></label>
                         <input type="date" id="birthday" class="form-control">
                         <div class="invalid-feedback" id="birthday-error"></div>
                     </div>
 
-                    <button class="btn btn-primary" id="submit" type="button">Submit</button>
-                    <button class="btn btn-secondary" id="cancel" type="button">Cancel</button>
+                    <div class="mb-3">
+                        <button class="btn btn-primary me-2" id="submit" type="button">Submit</button>
+                        <button class="btn btn-secondary" id="cancel" type="button">Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-</body>
 
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
