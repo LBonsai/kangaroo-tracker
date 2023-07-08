@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Arr;
 
 /**
  * KangarooTrackerModel
@@ -45,60 +45,50 @@ class KangarooTrackerModel extends Model
     /**
      * getKangaroo
      * @since 2023.07.06
-     * @return array|string
+     * @return array
      */
-    public function getKangaroo() : array|string
+    public function getKangaroo() : array
     {
-        try {
-            return self::orderBy('created_at', 'desc')->get()->toArray();
-        } catch (QueryException $oException) {
-            return $oException->getMessage();
-        }
+        return self::orderBy('created_at', 'desc')->get()->toArray();
     }
 
     /**
      * checkIfNameExists
      * @since 2023.07.07
-     * @param string $sName
+     * @param array $aParams
      * @return string
      */
-    public function checkIfNameExists(string $sName) : string
+    public function checkIfNameExists(array $aParams) : string
     {
-        try {
-            return self::where('name', '=', $sName)->where('id', '<>', 25)->exists();
-        } catch (QueryException $oException) {
-            return $oException->getMessage();
+        $oQuery = self::where('name', '=', $aParams['name']);
+
+        if (Arr::has($aParams, 'id') === true) {
+            $oQuery->where('id', '<>', $aParams['id']);
         }
+
+        return $oQuery->exists();
     }
 
     /**
      * addKangaroo
      * @since 2023.07.07
      * @param array $aFormData
-     * @return bool|string
+     * @return bool
      */
-    public function addKangaroo(array $aFormData) : bool|string
+    public function addKangaroo(array $aFormData) : bool
     {
-        try {
-            return self::fill($aFormData)->save();
-        } catch (QueryException $oException) {
-            return $oException->getMessage();
-        }
+        return self::fill($aFormData)->save();
     }
 
     /**
      * getKangarooById
      * @param int $iId
      * @since 2023.07.08
-     * @return array|string
+     * @return array
      */
-    public function getKangarooById(int $iId) : array|string
+    public function getKangarooById(int $iId) : array
     {
-        try {
-            return self::find($iId)->toArray();
-        } catch (QueryException $oException) {
-            return $oException->getMessage();
-        }
+        return self::find($iId)->toArray();
     }
 
     /**
@@ -106,14 +96,10 @@ class KangarooTrackerModel extends Model
      * @since 2023.07.08
      * @param int $iId
      * @param array $aFormData
-     * @return bool|string
+     * @return bool
      */
-    public function editKangaroo(int $iId, array $aFormData) : bool|string
+    public function editKangaroo(int $iId, array $aFormData) : bool
     {
-        try {
-            return self::where('id', $iId)->update($aFormData);
-        } catch (QueryException $oException) {
-            return $oException->getMessage();
-        }
+        return self::where('id', $iId)->update($aFormData);
     }
 }

@@ -17,8 +17,8 @@ return new class extends Migration
             $oTable->bigIncrements('id');
             $oTable->string('name', 50)->unique();
             $oTable->string('nickname', 20)->nullable();
-            $oTable->float('weight');
-            $oTable->float('height');
+            $oTable->decimal('weight', 5, 2);
+            $oTable->decimal('height', 5, 2);
             $oTable->enum('gender', ['Male', 'Female']);
             $oTable->string('color', 20)->nullable();
             $oTable->enum('friendliness', ['friendly', 'not friendly'])->nullable();

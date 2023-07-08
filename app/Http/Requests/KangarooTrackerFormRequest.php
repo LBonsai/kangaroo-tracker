@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Dflydev\DotAccessData\Data;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
-use App\Rules\PositiveFloat;
 
 /**
  * KangarooTrackerFormRequest
@@ -37,14 +35,12 @@ class KangarooTrackerFormRequest extends FormRequest
      */
     public function rules() : array
     {
-        $iId = (int)Route::current()->parameter('id');
-
         return [
             'id'           => ['sometimes', 'integer'],
-            'name'         => ['required', 'string', 'regex:/^[a-zA-Z\\s\-]{1,50}$/', 'unique:kangaroo,name,' . $iId],
+            'name'         => ['required', 'string', 'regex:/^[a-zA-Z\\s\-]{1,50}$/', 'unique:kangaroo,name,' . (int)Route::current()->parameter('id')],
             'nickname'     => ['nullable', 'string', 'regex:/^[a-zA-Z0-9\\s\-_]{0,20}$/'],
-            'weight'       => ['required', new PositiveFloat],
-            'height'       => ['required', new PositiveFloat],
+            'weight'       => ['required', 'regex:/^\\d{0,5}\\.\\d{1,2}$/'],
+            'height'       => ['required', 'regex:/^\\d{0,5}\\.\\d{1,2}$/'],
             'gender'       => ['required', 'string', Rule::in('Male', 'Female')],
             'color'        => ['nullable', 'string', 'regex:/^[a-zA-Z\\s]{0,20}$/'],
             'friendliness' => ['nullable', 'string', Rule::in('friendly', 'not friendly')],
@@ -61,15 +57,19 @@ class KangarooTrackerFormRequest extends FormRequest
     public function messages() : array
     {
         return [
-            'name.required'         => 'Please fill out this field.',
-            'name.regex'            => 'Name should only contain letters, spaces, and hyphens. It must be between 1 and 50 characters long.',
-            'name.unique'           => 'Name you entered already exists. Please choose a different name.',
-            'nickname.regex'        => 'Nickname should only contain letters, numbers, spaces, hyphens, and underscores. It must be between 1 and 20 characters long.',
-            'weight.required'       => 'Please fill out this field.',
-            'height.required'       => 'Please fill out this field.',
-            'gender.required'       => 'Please select an option from the dropdown menu.',
-            'color.regex'           => 'Color should only contain letters and spaces. It must be between 1 and 20 characters long.',
-            'birthday.required'     => 'Please choose a date from the calendar.'
+            'name.required'        => 'Please fill out this field.',
+            'name.regex'           => 'Name should only contain letters, spaces, and hyphens. It must be between 1 and 50 characters long.',
+            'name.unique'          => 'Name you entered already exists. Please choose a different name.',
+            'nickname.regex'       => 'Nickname should only contain letters, numbers, spaces, hyphens, and underscores. It must be between 1 and 20 characters long.',
+            'weight.required'      => 'Please fill out this field.',
+            'weight.regex'         => 'Weight should be a positive float number with up to 5 digits before the decimal and up to 2 digits after the decimal.',
+            'height.required'      => 'Please fill out this field.',
+            'height.regex'         => 'Height should be a positive float number with up to 5 digits before the decimal and up to 2 digits after the decimal.',
+            'gender.required'      => 'Please select an option from the dropdown menu.',
+            'color.regex'          => 'Color should only contain letters and spaces. It must be between 1 and 20 characters long.',
+            'birthday.required'    => 'Please choose a date from the calendar.',
+            'birthday.date'        => 'The selected date is not a valid date.',
+            'birthday.date_format' => 'Birthday must be in the format "YYYY-MM-DD".'
         ];
     }
 }

@@ -17,7 +17,7 @@ class KangarooTrackerService
     /**
      * @var KangarooTrackerModel $oKangarooTrackerModel
      */
-    private $oKangarooTrackerModel;
+    private KangarooTrackerModel $oKangarooTrackerModel;
 
     /**
      * KangarooTrackerService constructor.
@@ -35,45 +35,34 @@ class KangarooTrackerService
      */
     public function getKangaroo() : array
     {
-        $mResponseData = $this->oKangarooTrackerModel->getKangaroo();
-
-        if (is_array($mResponseData) === false) {
+        $aResponseData = $this->oKangarooTrackerModel->getKangaroo();
+        if (empty($aResponseData) === true) {
             return [
-                'code' => 500,
+                'code' => 404,
                 'data' => [
-                    'message' => $mResponseData
+                    'message' => 'No data found'
                 ]
             ];
         }
 
         return [
             'code' => 200,
-            'data' => $mResponseData
+            'data' => $aResponseData
         ];
     }
 
     /**
      * checkIfNameExists
      * @since 2023.07.07
-     * @param string $sName
+     * @param array $aParams
      * @return array
      */
-    public function checkIfNameExists(string $sName) : array
+    public function checkIfNameExists(array $aParams) : array
     {
-        $sResponse = $this->oKangarooTrackerModel->checkIfNameExists($sName);
-        if ($sResponse !== '' && $sResponse !== '1') {
-            return [
-                'code' => 500,
-                'data' => [
-                    'message' => $sResponse
-                ]
-            ];
-        }
-
         return [
             'code' => 200,
             'data' => [
-                'bIsExist' => ((int)$sResponse === 1)
+                'bIsExist' => (bool)$this->oKangarooTrackerModel->checkIfNameExists($aParams)
             ]
         ];
     }
@@ -87,8 +76,8 @@ class KangarooTrackerService
     public function addKangaroo(array $aFormData) : array
     {
         $aFormData['created_at'] = now();
-        $mResponseData = $this->oKangarooTrackerModel->addKangaroo($aFormData);
-        if (is_bool($mResponseData) === false || $mResponseData === false) {
+        $bResponseData = $this->oKangarooTrackerModel->addKangaroo($aFormData);
+        if ($bResponseData === false) {
             return [
                 'code' => 500,
                 'data' => [
@@ -99,7 +88,7 @@ class KangarooTrackerService
 
         return [
             'code' => 200,
-            'data' => $mResponseData
+            'data' => $bResponseData
         ];
     }
 
@@ -111,19 +100,9 @@ class KangarooTrackerService
      */
     public function getKangarooById(int $iId) : array
     {
-        $mResponseData = $this->oKangarooTrackerModel->getKangarooById($iId);
-        if (is_array($mResponseData) === false) {
-            return [
-                'code' => 500,
-                'data' => [
-                    'message' => $mResponseData
-                ]
-            ];
-        }
-
         return [
             'code' => 200,
-            'data' => $mResponseData
+            'data' => $this->oKangarooTrackerModel->getKangarooById($iId)
         ];
     }
 
@@ -138,8 +117,8 @@ class KangarooTrackerService
         $aFormData['updated_at'] = now();
         $iId = $aFormData['id'];
         unset($aFormData['id']);
-        $mResponseData = $this->oKangarooTrackerModel->editKangaroo($iId, $aFormData);
-        if ($mResponseData !== '1' || (bool)$mResponseData === false) {
+        $bResponse = $this->oKangarooTrackerModel->editKangaroo($iId, $aFormData);
+        if ($bResponse === false) {
             return [
                 'code' => 500,
                 'data' => [
@@ -150,7 +129,7 @@ class KangarooTrackerService
 
         return [
             'code' => 200,
-            'data' => (bool)$mResponseData
+            'data' => $bResponse
         ];
     }
 }

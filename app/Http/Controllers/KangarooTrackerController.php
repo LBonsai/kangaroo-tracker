@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\KangarooTrackerFormRequest;
 use App\Http\Services\KangarooTrackerService;
 use App\Models\KangarooTrackerModel;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -20,7 +21,7 @@ class KangarooTrackerController extends Controller
     /**
      * @var KangarooTrackerService $oKangarooTrackerService
      */
-    private $oKangarooTrackerService;
+    private KangarooTrackerService $oKangarooTrackerService;
 
     /**
      * KangarooTrackerController constructor.
@@ -44,13 +45,13 @@ class KangarooTrackerController extends Controller
 
     /**
      * checkIfNameExists
-     * @since 2023.07.07
-     * @param string $sName
+     * @param Request $oRequest
      * @return JsonResponse
+     * @since 2023.07.07
      */
-    public function checkIfNameExists(string $sName) : JsonResponse
+    public function checkIfNameExists(Request $oRequest) : JsonResponse
     {
-        $aResponse = $this->oKangarooTrackerService->checkIfNameExists($sName);
+        $aResponse = $this->oKangarooTrackerService->checkIfNameExists($oRequest->all());
         return response()->json($aResponse['data'], $aResponse['code']);
     }
 

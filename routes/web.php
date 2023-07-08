@@ -16,31 +16,25 @@ use Illuminate\Support\Facades\Route;
 /**
  * Page Routes
  */
-Route::get('/', function () {
-    return view('list');
-});
+Route::view('/', 'list');
 
-Route::get('/kangaroo/list', function () {
-    return view('list');
-});
-
-Route::get('/kangaroo/add', function () {
-    return view('form');
-});
-
-Route::get('/kangaroo/edit/{id}', function () {
-    return view('form');
+Route::prefix('kangaroo')->group(function () {
+    Route::view('list', 'list');
+    Route::view('add', 'form');
+    Route::view('edit/{id}', 'form');
 });
 
 /**
  * Web API Routes
  */
-Route::namespace('\App\Http\Controllers')->prefix('api')->group(function() {
-    Route::get('/list', 'KangarooTrackerController@getKangaroo');
-    Route::get('/check-name/{name}', 'KangarooTrackerController@checkIfNameExists');
-    Route::post('/add', 'KangarooTrackerController@addKangaroo');
-    Route::get('/list/{id}', 'KangarooTrackerController@getKangarooById');
-    Route::put('/edit/{id}', 'KangarooTrackerController@editKangaroo');
+Route::prefix('api')->group(function() {
+    Route::namespace('\App\Http\Controllers')->group(function() {
+        Route::get('/list', 'KangarooTrackerController@getKangaroo');
+        Route::get('/check-name', 'KangarooTrackerController@checkIfNameExists');
+        Route::post('/add', 'KangarooTrackerController@addKangaroo');
+        Route::get('/list/{id}', 'KangarooTrackerController@getKangarooById');
+        Route::put('/edit/{id}', 'KangarooTrackerController@editKangaroo');
+    });
 });
 
 
