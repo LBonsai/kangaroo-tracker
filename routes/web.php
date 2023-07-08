@@ -20,15 +20,15 @@ Route::get('/', function () {
     return view('list');
 });
 
-Route::get('/list', function () {
+Route::get('/kangaroo/list', function () {
     return view('list');
 });
 
-Route::get('/create', function () {
-    return view('create');
+Route::get('/kangaroo/add', function () {
+    return view('add');
 });
 
-Route::get('/edit/{id}', function () {
+Route::get('/kangaroo/edit/{id}', function () {
     return view('edit');
 });
 
@@ -36,8 +36,10 @@ Route::get('/edit/{id}', function () {
 /**
  * Web API Routes
  */
-Route::namespace('\App\Http\Controllers')->group(function() {
+Route::namespace('\App\Http\Controllers')->prefix('api')->group(function() {
     Route::get('/list', 'KangarooTrackerController@getKangaroo');
+    Route::get('/check-name/{name}', 'KangarooTrackerController@checkIfNameExists');
+    Route::post('/add', 'KangarooTrackerController@addKangaroo');
 });
 
 

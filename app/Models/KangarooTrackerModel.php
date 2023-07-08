@@ -16,6 +16,11 @@ use Illuminate\Database\QueryException;
 class KangarooTrackerModel extends Model
 {
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * @var string
      */
     protected $table = 'kangaroo';
@@ -23,13 +28,18 @@ class KangarooTrackerModel extends Model
     /**
      * @var array
      */
-    protected $hidden = ['updated_at', 'created_at'];
+    protected $hidden = ['created_at', 'updated_at'];
 
     /**
      * @var array
      */
-    protected $casts = [
-        'created_at'  => 'datetime:Y-m-d'
+    protected $casts = ['created_at' => 'datetime:Y-m-d'];
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'nickname', 'weight', 'height', 'gender', 'color', 'friendliness', 'birthday', 'created_at', 'updated_at'
     ];
 
     /**
@@ -41,6 +51,36 @@ class KangarooTrackerModel extends Model
     {
         try {
             return self::orderBy('created_at', 'desc')->get()->toArray();
+        } catch (QueryException $oException) {
+            return $oException->getMessage();
+        }
+    }
+
+    /**
+     * checkIfNameExists
+     * @since 2023.07.07
+     * @param string $sName
+     * @return string
+     */
+    public function checkIfNameExists(string $sName) : string
+    {
+        try {
+            return self::where('name', $sName)->exists();
+        } catch (QueryException $oException) {
+            return $oException->getMessage();
+        }
+    }
+
+    /**
+     * addKangaroo
+     * @since 2023.07.07
+     * @param array $aFormData
+     * @return bool|string
+     */
+    public function addKangaroo(array $aFormData) : bool|string
+    {
+        try {
+            return self::fill($aFormData)->save();
         } catch (QueryException $oException) {
             return $oException->getMessage();
         }

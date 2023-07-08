@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="//cdn3.devexpress.com/jslib/23.1.3/css/dx.light.css">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 

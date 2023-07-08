@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('kangaroo', function (Blueprint $oTable) {
             $oTable->bigIncrements('id');
-            $oTable->string('name', 255)->unique();
-            $oTable->string('nickname', 60)->nullable();
+            $oTable->string('name', 50)->unique();
+            $oTable->string('nickname', 20)->nullable();
             $oTable->float('weight');
             $oTable->float('height');
             $oTable->enum('gender', ['Male', 'Female']);
-            $oTable->string('color', 60)->nullable();
+            $oTable->string('color', 20)->nullable();
             $oTable->enum('friendliness', ['friendly', 'not friendly'])->nullable();
             $oTable->date('birthday');
             $oTable->timestamps();

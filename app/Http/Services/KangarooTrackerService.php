@@ -51,4 +51,55 @@ class KangarooTrackerService
             'data' => $mResponseData
         ];
     }
+
+    /**
+     * checkIfNameExists
+     * @since 2023.07.07
+     * @param string $sName
+     * @return array
+     */
+    public function checkIfNameExists(string $sName) : array
+    {
+        $sResponse = $this->oKangarooTrackerModel->checkIfNameExists($sName);
+        if ($sResponse !== '' && $sResponse !== '1') {
+            return [
+                'code' => 500,
+                'data' => [
+                    'message' => $sResponse
+                ]
+            ];
+        }
+
+        return [
+            'code' => 200,
+            'data' => [
+                'bIsExist' => ((int)$sResponse === 1)
+            ]
+        ];
+    }
+
+    /**
+     * addKangaroo
+     * @since 2023.07.07
+     * @param array $aFormData
+     * @return array
+     */
+    public function addKangaroo(array $aFormData) : array
+    {
+        $aFormData['created_at'] = now();
+        $mResponseData = $this->oKangarooTrackerModel->addKangaroo($aFormData);
+        if (is_bool($mResponseData) === false || $mResponseData === false) {
+            return [
+                'code' => 500,
+                'data' => [
+                    'message' => 'The new data could not be registered. Please try again.'
+                ]
+            ];
+        }
+
+        return [
+            'code' => 200,
+            'data' => $mResponseData
+        ];
+    }
 }
