@@ -1,4 +1,14 @@
 $(() => {
+    // Setting of common variables
+    var sMethod = 'POST';
+    var iCurrentId = 0;
+    var sConfirmationMessage = 'Are you sure you want to register this new data?';
+    var sUrl = '/api/add';
+    var sAlertMessage = 'Registration successful';
+    var sErrorMessages = 'There is an error while saving new data.';
+
+    init();
+
     /**
      * Automatically includes CSRF token in all AJAX requests
      * @author Lee Benedict F. Baniqued
@@ -10,14 +20,23 @@ $(() => {
         }
     });
 
-    init();
     function init() {
         let sPathName = window.location.pathname;
-        // List Page
-        if (sPathName === '/' || sPathName.split('/').pop() === 'list') {
-            getKangarooData();
-        } else { // If Add and Edit Page
+        let aExplodedPathName = sPathName.split('/');
 
+        // List Page
+        if (sPathName === '/' || aExplodedPathName[2] === 'list') {
+            getKangarooData();
+        } else if (aExplodedPathName[2] === 'add') {
+
+        } else {
+            sMethod = 'PUT';
+            sConfirmationMessage = 'Are you sure you want to update the data?';
+            iCurrentId = aExplodedPathName[3];
+            sUrl = '/api/edit/' + iCurrentId;
+            sAlertMessage = 'Modification successful';
+            sErrorMessages = 'There is an error while updating data.';
+            populateForm(iCurrentId);
         }
     }
 
@@ -149,30 +168,34 @@ $(() => {
     }
 
     /**
-     * Insert new kangaroo data upon clicking of the submit button
+     * Insert or update new kangaroo data upon clicking of the submit button
      * @author Lee Benedict F. Baniqued
      * @since 2023.07.07
      */
     $('#submit').click(function() {
-        if (confirm('Are you sure you want to register this new data') === false) {
-            return false;
-        }
-
-        const oFormData = validateFields();
-        if (oFormData.bIsValid === true) {
-            $.ajax({
-                url: '/api/add',
-                type: 'POST',
-                data: oFormData.form_data,
-                success: function() {
-                    alert('Registration successful');
-                    window.location.href = '/kangaroo/list';
-                },
-                error: function(oErrorResponse) {
-                    alert(oErrorResponse.responseText);
-                    //Setting of alert messages from backend
+        if (confirm(sConfirmationMessage) === true) {
+            const oFormData = validateFields();
+            if (oFormData.bIsValid === true) {
+                if (sMethod === 'PUT') {
+                    oFormData.form_data['id'] = iCurrentId;
                 }
-            });
+
+                $.ajax({
+                    url: sUrl,
+                    type: sMethod,
+                    data: oFormData.form_data,
+                    success: function() {
+                        alert(sAlertMessage);
+                        // window.location.href = '/kangaroo/list';
+                    },
+                    error: function(oErrorResponse) {
+                        alert(sErrorMessages);
+                        if (oErrorResponse.status === 422) {
+                            displayBackendErrorMessages(oErrorResponse.responseJSON.errors);
+                        }
+                    }
+                });
+            }
         }
     });
 
@@ -198,7 +221,8 @@ $(() => {
             oFormData[$(this).attr('id')] = $.trim($(this).val());
         });
 
-        // Reset inline error messages
+        // Hide and empty inline error messages
+        $('.invalid-feedback').text('');
         $('.invalid-feedback').hide();
 
         if (checkIfEmpty(oFormData) === false || checkIfValidCharactersAndLength(oFormData) === false || checkIfNameExists(oFormData['name']) === false) {
@@ -223,10 +247,19 @@ $(() => {
      * @return {boolean}
      */
     function checkIfEmpty(oFormData) {
+        const oErrorMessages = {
+            name     : 'Please fill out this field.',
+            weight   : 'Please fill out this field.',
+            height   : 'Please fill out this field.',
+            gender   : 'Please select an option from the dropdown menu.',
+            birthday : 'Please choose a date from the calendar.'
+        }
+
         let bIsValid = true;
         $.each(oFormData, function(sKey, sValue) {
             if ($.inArray(sKey, ['name', 'weight', 'height', 'gender', 'birthday']) !== -1) {
                 if (sValue === '') {
+                    $('#' + sKey + '-error').text(oErrorMessages[sKey]);
                     $('#' + sKey + '-error').show();
                     bIsValid = false;
                 }
@@ -246,24 +279,33 @@ $(() => {
      */
     function checkIfValidCharactersAndLength(oFormData) {
         let bIsValid= true;
-        const oNameProperties = new RegExp('^[a-zA-Z\\s-]{1,50}$');
+        const oErrorMessages = {
+            name     : 'Name should only contain letters, spaces, and hyphens. It must be between 1 and 50 characters long.',
+            nickname : 'Nickname should only contain letters, numbers, spaces, hyphens, and underscores. It must be between 1 and 20 characters long.',
+            color    : 'Color should only contain letters and spaces. It must be between 1 and 20 characters long.'
+        }
+
+        const oNameProperties = new RegExp('^[a-zA-Z\\s\-]{1,50}$');
         const oNicknameProperties = new RegExp('^[a-zA-Z0-9\\s\-_]{0,20}$');
         const oColorProperties = new RegExp('^[a-zA-Z\\s]{0,20}$');
 
         $.each(oFormData, function(sKey, sValue) {
             if ($.inArray(sKey, ['name', 'nickname', 'color']) !== -1) {
                 if (sKey === 'name' && oNameProperties.test(sValue) !== true) {
-                    $('#' + sKey + '-chars-error').show();
+                    $('#' + sKey + '-error').text(oErrorMessages[sKey]);
+                    $('#' + sKey + '-error').show();
                     bIsValid = false;
                 }
 
                 if (sKey === 'nickname' && oNicknameProperties.test(sValue) !== true) {
-                    $('#' + sKey + '-chars-error').show();
+                    $('#' + sKey + '-error').text(oErrorMessages[sKey]);
+                    $('#' + sKey + '-error').show();
                     bIsValid = false;
                 }
 
                 if (sKey === 'color' && oColorProperties.test(sValue) !== true) {
-                    $('#' + sKey + '-chars-error').show();
+                    $('#' + sKey + '-error').text(oErrorMessages[sKey]);
+                    $('#' + sKey + '-error').show();
                     bIsValid = false;
                 }
             }
@@ -290,7 +332,8 @@ $(() => {
             async: false,
             success: function(oSuccessResponse) {
                 if (oSuccessResponse.bIsExist === true) {
-                    $('#name-exist-error').show();
+                    $('#name-error').text('Name you entered already exists. Please choose a different name.');
+                    $('#name-error').show();
                     bIsValid = false;
                 }
             },
@@ -301,5 +344,40 @@ $(() => {
         });
 
         return bIsValid;
+    }
+
+    /**
+     * populateForm
+     * @author Lee Benedict F. Baniqued
+     * @since 2023.07.08
+     */
+    function populateForm(iId) {
+        $.ajax({
+            url: '/api/list/' + iId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(oSuccessResponse) {
+                $.each(oSuccessResponse, function(sKey, mValue) {
+                    $('#' + sKey).val(mValue);
+                });
+            },
+            error: function(){
+                alert('There is an error while retrieving the data from the database. Please try again.');
+                window.location.href = '/kangaroo/list';
+            }
+        });
+    }
+
+    /**
+     * displayBackendErrorMessages
+     * @author Lee Benedict F. Baniqued
+     * @since 2023.07.08
+     * @param {object} oErrors
+     */
+    function displayBackendErrorMessages(oErrors) {
+        $.each(oErrors, function(sField, oMessages) {
+            $('#' + sField + '-error').text(oMessages.join(', '));
+            $('#' + sField + '-error').show();
+        });
     }
 });

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Dflydev\DotAccessData\Data;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 use App\Rules\PositiveFloat;
 
@@ -35,8 +37,11 @@ class KangarooTrackerFormRequest extends FormRequest
      */
     public function rules() : array
     {
+        $iId = (int)Route::current()->parameter('id');
+
         return [
-            'name'         => ['required', 'string', 'regex:/^[a-zA-Z\\s-]{1,50}$/', 'unique:kangaroo,name'],
+            'id'           => ['sometimes', 'integer'],
+            'name'         => ['required', 'string', 'regex:/^[a-zA-Z\\s\-]{1,50}$/', 'unique:kangaroo,name,' . $iId],
             'nickname'     => ['nullable', 'string', 'regex:/^[a-zA-Z0-9\\s\-_]{0,20}$/'],
             'weight'       => ['required', new PositiveFloat],
             'height'       => ['required', new PositiveFloat],
@@ -44,6 +49,27 @@ class KangarooTrackerFormRequest extends FormRequest
             'color'        => ['nullable', 'string', 'regex:/^[a-zA-Z\\s]{0,20}$/'],
             'friendliness' => ['nullable', 'string', Rule::in('friendly', 'not friendly')],
             'birthday'     => ['required', 'date', 'date_format:Y-m-d']
+        ];
+    }
+
+    /**
+     * messages
+     * Set custom messages for input fields errors
+     * @since 2023.07.08
+     * @return array
+     */
+    public function messages() : array
+    {
+        return [
+            'name.required'         => 'Please fill out this field.',
+            'name.regex'            => 'Name should only contain letters, spaces, and hyphens. It must be between 1 and 50 characters long.',
+            'name.unique'           => 'Name you entered already exists. Please choose a different name.',
+            'nickname.regex'        => 'Nickname should only contain letters, numbers, spaces, hyphens, and underscores. It must be between 1 and 20 characters long.',
+            'weight.required'       => 'Please fill out this field.',
+            'height.required'       => 'Please fill out this field.',
+            'gender.required'       => 'Please select an option from the dropdown menu.',
+            'color.regex'           => 'Color should only contain letters and spaces. It must be between 1 and 20 characters long.',
+            'birthday.required'     => 'Please choose a date from the calendar.'
         ];
     }
 }

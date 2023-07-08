@@ -25,13 +25,12 @@ Route::get('/kangaroo/list', function () {
 });
 
 Route::get('/kangaroo/add', function () {
-    return view('add');
+    return view('form');
 });
 
 Route::get('/kangaroo/edit/{id}', function () {
-    return view('edit');
+    return view('form');
 });
-
 
 /**
  * Web API Routes
@@ -40,6 +39,8 @@ Route::namespace('\App\Http\Controllers')->prefix('api')->group(function() {
     Route::get('/list', 'KangarooTrackerController@getKangaroo');
     Route::get('/check-name/{name}', 'KangarooTrackerController@checkIfNameExists');
     Route::post('/add', 'KangarooTrackerController@addKangaroo');
+    Route::get('/list/{id}', 'KangarooTrackerController@getKangarooById');
+    Route::put('/edit/{id}', 'KangarooTrackerController@editKangaroo');
 });
 
 

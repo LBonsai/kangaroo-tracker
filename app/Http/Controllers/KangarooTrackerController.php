@@ -65,4 +65,28 @@ class KangarooTrackerController extends Controller
         $aResponse = $this->oKangarooTrackerService->addKangaroo($oRequest->validated());
         return response()->json($aResponse['data'], $aResponse['code']);
     }
+
+    /**
+     * getKangarooById
+     * @since 2023.07.08
+     * @param int $iId
+     * @return JsonResponse
+     */
+    public function getKangarooById(int $iId)
+    {
+        $aResponse = $this->oKangarooTrackerService->getKangarooById($iId);
+        return response()->json($aResponse['data'], $aResponse['code']);
+    }
+
+    /**
+     * editKangaroo
+     * @since 2023.07.08
+     * @param KangarooTrackerFormRequest $oRequest
+     * @return JsonResponse
+     */
+    public function editKangaroo(KangarooTrackerFormRequest $oRequest) : JsonResponse
+    {
+        $aResponse = $this->oKangarooTrackerService->editKangaroo($oRequest->validated());
+        return response()->json($aResponse['data'], $aResponse['code']);
+    }
 }

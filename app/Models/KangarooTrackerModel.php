@@ -65,7 +65,7 @@ class KangarooTrackerModel extends Model
     public function checkIfNameExists(string $sName) : string
     {
         try {
-            return self::where('name', $sName)->exists();
+            return self::where('name', '=', $sName)->where('id', '<>', 25)->exists();
         } catch (QueryException $oException) {
             return $oException->getMessage();
         }
@@ -81,6 +81,37 @@ class KangarooTrackerModel extends Model
     {
         try {
             return self::fill($aFormData)->save();
+        } catch (QueryException $oException) {
+            return $oException->getMessage();
+        }
+    }
+
+    /**
+     * getKangarooById
+     * @param int $iId
+     * @since 2023.07.08
+     * @return array|string
+     */
+    public function getKangarooById(int $iId) : array|string
+    {
+        try {
+            return self::find($iId)->toArray();
+        } catch (QueryException $oException) {
+            return $oException->getMessage();
+        }
+    }
+
+    /**
+     * editKangaroo
+     * @since 2023.07.08
+     * @param int $iId
+     * @param array $aFormData
+     * @return bool|string
+     */
+    public function editKangaroo(int $iId, array $aFormData) : bool|string
+    {
+        try {
+            return self::where('id', $iId)->update($aFormData);
         } catch (QueryException $oException) {
             return $oException->getMessage();
         }
