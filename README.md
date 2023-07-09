@@ -6,8 +6,8 @@ Kangaroo Tracker is a web application that allows you to track kangaroos. Follow
 
 Make sure you have the following software installed before proceeding:
 
-- XAMPP
-- Git (optional)
+- XAMPP ([Download Xampp](https://www.apachefriends.org/))
+- Git ([Download Git - Optional](https://git-scm.com/))
 - Composer ([Download Composer](https://getcomposer.org/download/))
 - Node.js ([Download Node.js](https://nodejs.org/en))
 
