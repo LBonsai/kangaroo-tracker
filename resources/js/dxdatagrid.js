@@ -81,7 +81,14 @@ export function buildDataGridTable(aData) {
             {
                 dataField: 'friendliness',
                 caption: 'Friendliness',
-                alignment: 'center'
+                alignment: 'center',
+                cellTemplate: function(oContainer, oOptions) {
+                    if (!oOptions.data.friendliness) {
+                        $(oContainer).text('-');
+                    } else {
+                        $(oContainer).text(oOptions.data.friendliness);
+                    }
+                }
             },
             {
                 type: 'buttons',
