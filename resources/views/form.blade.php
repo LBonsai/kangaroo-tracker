@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <button class="btn btn-primary me-2" id="submit" type="button">Submit</button>
+                        <button class="btn btn-primary me-2" id="submit" type="button"></button>
                         <button class="btn btn-secondary" id="cancel" type="button">Cancel</button>
                     </div>
                 </form>

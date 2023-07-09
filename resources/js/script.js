@@ -8,6 +8,7 @@ $(() => {
     var sAlertMessage = 'Registration successful';
     var sErrorMessages = 'There is an error while saving new data.'
     var sFormName = 'Registration Form';
+    var sPrimaryButtonText = 'Create';
 
     /**
      * Automatically includes CSRF token in all AJAX requests
@@ -277,10 +278,11 @@ $(() => {
             sAlertMessage = 'Modification successful';
             sErrorMessages = 'There is an error while updating data.';
             sFormName = 'Update Form';
+            sPrimaryButtonText = 'Update';
             populateForm(iCurrentId);
         }
 
-        setFormAttributes(sFormName);
+        setFormAttributes(sFormName, sPrimaryButtonText);
         setDatePickerAttributes();
 
     }
@@ -290,9 +292,11 @@ $(() => {
      * @author Lee Benedict F. Baniqued
      * @since 2023.07.08
      * @param {string} sFormName
+     * @param {string} sPrimaryButtonText
      */
-    function setFormAttributes(sFormName) {
+    function setFormAttributes(sFormName, sPrimaryButtonText) {
         $('#form-name').text(sFormName);
+        $('#submit').text(sPrimaryButtonText);
     }
 
     /**
