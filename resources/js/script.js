@@ -308,6 +308,8 @@ $(() => {
         let sFormattedDate = `${iYear}-${iMonth.toString().padStart(2, '0')}-${iDay.toString().padStart(2, '0')}`;
 
         $('#birthday').attr('max', sFormattedDate).datepicker({
+            changeMonth: true,
+            changeYear: true,
             dateFormat: 'yy-mm-dd',
             maxDate: sFormattedDate,
             onClose: function(sSelectedDate) {
